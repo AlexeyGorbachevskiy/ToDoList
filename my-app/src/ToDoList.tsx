@@ -1,20 +1,16 @@
-import React from "react";
-
-type TaskType = {
-    id: number,
-    title: string
-    isDone: boolean
-}
+import React from 'react';
+import {FilterValueType, TaskType} from './App';
 
 
 export type PropsType = {
-    title: string,
-    tasks: Array<TaskType>
+    title: string;
+    tasks: Array<TaskType>;
+    removeTask: (id: number) => void;
+    changeFilter: (value: FilterValueType) => void;
 }
 
-
 export function Todolist(props: PropsType) {
-    debugger;
+
     return (
         <div>
             <h3>{props.title}</h3>
@@ -23,13 +19,32 @@ export function Todolist(props: PropsType) {
                 <button>+</button>
             </div>
             <ul>
-                <li><input type="checkbox" checked={props.tasks[0].isDone}/> <span>{props.tasks[0].title}</span></li>
-                <li><input type="checkbox" checked={props.tasks[1].isDone}/> <span>{props.tasks[1].title}</span></li>
+                {
+                    props.tasks.map((t: TaskType) => {
+                        return <li key={t.id}>
+                            <input type='checkbox' checked={t.isDone}/>
+                            <span>{t.title} </span>
+                            <button onClick={() => {
+                                props.removeTask(t.id)
+                            }}>x
+                            </button>
+                        </li>
+                    })
+                }
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => {
+                    props.changeFilter('all')
+                }}>All
+                </button>
+                <button onClick={() => {
+                    props.changeFilter('active')
+                }}>Active
+                </button>
+                <button onClick={() => {
+                    props.changeFilter('completed')
+                }}>Completed
+                </button>
             </div>
         </div>
     );
