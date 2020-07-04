@@ -1,24 +1,30 @@
-.error {
+.error
+{
     border: red 1px solid;
 }
 
-.error_message {
+.error_message
+{
     color: red;
 }
 
-.add_btn {
+.add_btn
+{
     cursor: pointer;
 }
 
-.filter_btn {
+.filter_btn
+{
     cursor: pointer;
 }
 
-.active_filter {
+.active_filter
+{
     cursor: pointer;
     background-color: aquamarine;
 }
 
-.is_done {
-    opacity: 0.5;
+.is_done
+{
+    opacity: .5;
 }
