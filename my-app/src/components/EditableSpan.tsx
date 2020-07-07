@@ -18,7 +18,11 @@ function EditableSpan(props: EditableSpanPropsType) {
     }
     const onInputBlur = () => {
         setEditMode(false);
-        props.onChangeTitle(title);
+        if (title.trim()) {
+            props.onChangeTitle(title);
+        } else {
+            setTitle(props.title)
+        }
     }
 
     return (
