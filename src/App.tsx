@@ -4,7 +4,6 @@ import {Todolist} from './components/ToDoList';
 import {v1} from "uuid";
 import AddItemForm from "./components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
-import classes from "*.module.css";
 import {Menu} from "@material-ui/icons";
 
 export type TaskType = {
@@ -13,7 +12,7 @@ export type TaskType = {
     isDone: boolean;
 }
 
-type TodoListsType = {
+export type TodoListsType = {
     id: string
     title: string
     filter: FilterValueType
@@ -86,6 +85,7 @@ function App() {
         }
     }
 
+    //TODO Check it into todoListsreducer
     const removeTodoList = (id: string) => {
         let todoListsRest = todoLists.filter(t => t.id !== id);
         setTodoLists([...todoListsRest]);
@@ -132,7 +132,7 @@ function App() {
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding:'10px'}}>
+                <Grid container style={{padding: '10px'}}>
                     <AddItemForm addItem={addTodoList}/>
                 </Grid>
                 <Grid container spacing={3}>
@@ -151,7 +151,7 @@ function App() {
                         }
                         return (
                             <Grid item>
-                                <Paper style={{padding:'10px'}}>
+                                <Paper style={{padding: '10px'}}>
                                     <Todolist key={tl.id}
                                               id={tl.id}
                                               title={tl.title}
