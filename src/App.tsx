@@ -17,7 +17,7 @@ export type TodoListsType = {
     title: string
     filter: FilterValueType
 }
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
@@ -85,7 +85,6 @@ function App() {
         }
     }
 
-    //TODO Check it into todoListsreducer
     const removeTodoList = (id: string) => {
         let todoListsRest = todoLists.filter(t => t.id !== id);
         setTodoLists([...todoListsRest]);
