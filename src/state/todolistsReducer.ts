@@ -1,5 +1,6 @@
-import {FilterValueType, TodoListsType} from "../App";
+
 import {v1} from "uuid";
+import {FilterValueType, TodoListsType} from "../AppWithRedux";
 
 type StateType = Array<TodoListsType>
 export let todoListId1 = v1();
