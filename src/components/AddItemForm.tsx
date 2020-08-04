@@ -9,18 +9,25 @@ type AddItemFormPropsType = {
 }
 
 
-function AddItemForm(props: AddItemFormPropsType) {
+export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+
+    console.log('AddItemForm')
 
     let [newTaskTitle, setNewTaskTitle] = useState('');
     let [error, setError] = useState<null | string>(null);
 
     const onEnterPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (error !== null) {
+            setError(null);
+        }
         if (e.charCode === 13) {
             onClickAddHandler();
         }
     }
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setError(null);
+        if (error !== null) {
+            setError(null);
+        }
         setNewTaskTitle(e.currentTarget.value);
     }
     const onClickAddHandler = () => {
@@ -54,6 +61,6 @@ function AddItemForm(props: AddItemFormPropsType) {
             {/*{error && <div className={obj.error_message}>{error}</div>}*/}
         </div>
     )
-}
+})
 
 export default AddItemForm;

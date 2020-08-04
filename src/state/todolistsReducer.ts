@@ -1,13 +1,12 @@
-
 import {v1} from "uuid";
 import {FilterValueType, TodoListsType} from "../AppWithRedux";
 
-type StateType = Array<TodoListsType>
+
 export let todoListId1 = v1();
 export let todoListId2 = v1();
-const initialState:StateType=[
-    {id: todoListId1, title: 'What to learn', filter: 'all'},
-    {id: todoListId2, title: 'What to buy', filter: 'all'},
+const initialState: Array<TodoListsType> = [
+    // {id: todoListId1, title: 'What to learn', filter: 'all'},
+    // {id: todoListId2, title: 'What to buy', filter: 'all'},
 ]
 
 
@@ -18,7 +17,7 @@ export type RemoveTodoListActionType = {
 export type AddTodoListActionType = {
     type: 'ADD-TODOLIST'
     title: string
-    todoListId:string
+    todoListId: string
 }
 export type ChangeTodoListTitleActionType = {
     type: 'CHANGE-TODOLIST-TITLE'
@@ -34,8 +33,9 @@ export type ChangeTodoListFilterActionType = {
 type ActionType =
     RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListTitleActionType | ChangeTodoListFilterActionType;
 
-export const todoListsReducer = (state: StateType=initialState, action: ActionType):StateType => {
+export const todoListsReducer = (state: Array<TodoListsType> = initialState, action: ActionType): Array<TodoListsType> => {
     switch (action.type) {
+
         case 'REMOVE-TODOLIST': {
             return state.filter((t: TodoListsType) => t.id !== action.id)
         }
@@ -62,6 +62,7 @@ export const todoListsReducer = (state: StateType=initialState, action: ActionTy
             }
             return [
                 ...state
+
             ]
         }
 
@@ -76,7 +77,7 @@ export const removeTodoListAC = (todolistId: string): RemoveTodoListActionType =
     return {type: 'REMOVE-TODOLIST', id: todolistId}
 }
 export const addTodoListAC = (title: string): AddTodoListActionType => {
-    return {type: 'ADD-TODOLIST', title: title,todoListId:v1()}
+    return {type: 'ADD-TODOLIST', title: title, todoListId: v1()}
 }
 export const changeTodoListTitleAC = (id: string, title: string): ChangeTodoListTitleActionType => {
     return {type: 'CHANGE-TODOLIST-TITLE', id: id, title: title}
