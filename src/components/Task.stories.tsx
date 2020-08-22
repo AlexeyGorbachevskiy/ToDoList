@@ -1,8 +1,7 @@
 import React from 'react';
-
-import AddItemForm from "./AddItemForm";
 import {action} from "@storybook/addon-actions";
 import {Task} from "./Task";
+import {TaskPriorities, TaskStatuses} from "../api/TodoListsAPI";
 
 export default {
     title: 'Task Component',
@@ -17,14 +16,36 @@ const removeTask = action('Task is removed ');
 export const TaskBaseExample = () => {
     return (
         <>
-        <Task task={{id: '1', isDone: true, title: 'CSS'}}
-              todoListId={'todoList1'}
-              removeTask={removeTask}
-              changeTaskTitle={changeTaskTitle}
-              changeTaskStatus={changeTaskStatus}
-              filter={'all'}
-        />
-            <Task task={{id: '2', isDone: false, title: 'Html'}}
+            <Task task={
+                {
+                    id: '1', status: TaskStatuses.Completed, title: 'CSS',
+                    description: '',
+                    priority: TaskPriorities.Low,
+                    startDate: '',
+                    deadline: '',
+                    todoListId: '',
+                    order: 0,
+                    addedDate: '',
+                }
+            }
+                  todoListId={'todoList1'}
+                  removeTask={removeTask}
+                  changeTaskTitle={changeTaskTitle}
+                  changeTaskStatus={changeTaskStatus}
+                  filter={'all'}
+            />
+            <Task task={
+                {
+                    id: '2', status: TaskStatuses.New, title: 'Html',
+                    description: '',
+                    priority: TaskPriorities.Low,
+                    startDate: '',
+                    deadline: '',
+                    todoListId: '',
+                    order: 0,
+                    addedDate: '',
+                }
+            }
                   todoListId={'todoList2'}
                   removeTask={removeTask}
                   changeTaskTitle={changeTaskTitle}

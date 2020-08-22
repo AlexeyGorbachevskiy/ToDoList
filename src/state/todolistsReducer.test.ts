@@ -3,25 +3,23 @@ import {v1} from 'uuid';
 import {
     addTodoListAC,
     changeTodoListFilterAC,
-    changeTodoListTitleAC,
-    removeTodoListAC,
+    changeTodoListTitleAC, FilterValueType,
+    removeTodoListAC, TodoListDomainType,
     todoListsReducer
 } from "./todolistsReducer";
-import {FilterValueType, TodoListsType} from "../AppWithRedux";
 
 
-
-
-let todoListId1:string;
-let todoListId2:string;
-let startState: Array<TodoListsType>
-beforeEach(()=>{
+let todoListId1: string;
+let todoListId2: string;
+let startState: Array<TodoListDomainType>
+beforeEach(() => {
     todoListId1 = v1();
     todoListId2 = v1();
     startState = [
-        {id: todoListId1, title: "What to learn", filter: "all"},
-        {id: todoListId2, title: "What to buy", filter: "all"}
-    ]})
+        {id: todoListId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
+        {id: todoListId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
+    ]
+})
 
 test('todoList should be removed', () => {
 
@@ -47,7 +45,6 @@ test('todoList should be added', () => {
 test('todoList should change its name', () => {
 
     let newTodoListTitle = "New TodoList";
-
 
 
     const endState = todoListsReducer(startState, changeTodoListTitleAC(todoListId2, newTodoListTitle));
