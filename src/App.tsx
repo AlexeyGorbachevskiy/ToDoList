@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './components/ToDoList';
 import AddItemForm from "./components/AddItemForm";
@@ -7,13 +7,13 @@ import {Menu} from "@material-ui/icons";
 import {
     addTodoListAC,
     changeTodoListFilterAC,
-    changeTodoListTitleAC, FilterValueType,
+    changeTodoListTitleAC, fetchTodoListsThunkCreator, FilterValueType,
     removeTodoListAC, TodoListDomainType,
 } from "./state/todolistsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasksReducer";
-import {TaskStatuses, TaskType} from "./api/TodoListsAPI";
+import {TaskStatuses, TaskType, todoListsAPI} from "./api/TodoListsAPI";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -26,6 +26,11 @@ const App = React.memo(() => {
     const todoLists = useSelector<AppRootType, Array<TodoListDomainType>>(state => state.todoLists);
     const tasks = useSelector<AppRootType, TasksStateType>(state => state.tasks);
     const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        dispatch(fetchTodoListsThunkCreator());
+    }, [])
 
 
     const changeFilter = useCallback((value: FilterValueType, id: string) => {
