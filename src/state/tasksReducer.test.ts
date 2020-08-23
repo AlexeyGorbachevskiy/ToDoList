@@ -1,16 +1,15 @@
 import {
     addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
     removeTaskAC,
-    removeTodoListAC, setTasksAC,
-    tasksReducer
+    removeTodoListAC,
+    setTasksAC,
+    tasksReducer,
+    updateTaskAC
 } from './tasksReducer';
 
 import {addTodoListAC, setTodoListsAC} from "./todolistsReducer";
 import {TasksStateType} from "../App";
 import {TaskPriorities, TaskStatuses} from "../api/TodoListsAPI";
-import {v1} from "uuid";
 
 
 let startState: TasksStateType
@@ -100,7 +99,18 @@ test('Task should be deleted from correct array', () => {
 
 test('Task should be added to correct array', () => {
 
-    const action = addTaskAC("juice", "todoListId2");
+    const action = addTaskAC({
+        todoListId: 'todoListId2',
+        title: 'juice',
+        status: TaskStatuses.New,
+        addedDate: '',
+        deadline: '',
+        description: '',
+        order: 0,
+        priority: 0,
+        startDate: '',
+        id: 'id exists',
+    });
 
     const endState = tasksReducer(startState, action)
 
@@ -114,7 +124,7 @@ test('Task should be added to correct array', () => {
 
 test('Status of specified task should be changed', () => {
 
-    const action = changeTaskStatusAC("2", TaskStatuses.New, "todoListId2");
+    const action = updateTaskAC("2", {status: TaskStatuses.New}, "todoListId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -127,7 +137,7 @@ test('Status of specified task should be changed', () => {
 test('Title of specified task should be changed', () => {
 
 
-    const action = changeTaskTitleAC("2", 'water', "todoListId2");
+    const action = updateTaskAC("2", {title: 'water'}, "todoListId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -140,7 +150,9 @@ test('Title of specified task should be changed', () => {
 test('New array should be added when new todolist is added', () => {
 
 
-    const action = addTodoListAC("no matter");
+    const action = addTodoListAC({
+        id: 'any', title: 'no matter', addedDate: '', order: 0
+    });
 
     const endState = tasksReducer(startState, action)
 

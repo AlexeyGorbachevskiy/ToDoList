@@ -5,15 +5,18 @@ import AddItemForm from "./components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
-    addTodoListAC,
+    addTodoListThunkCreator,
     changeTodoListFilterAC,
-    changeTodoListTitleAC, fetchTodoListsThunkCreator, FilterValueType,
-    removeTodoListAC, TodoListDomainType,
+    changeTodoListTitleThunkCreator,
+    fetchTodoListsThunkCreator,
+    FilterValueType,
+    removeTodoListThunkCreator,
+    TodoListDomainType,
 } from "./state/todolistsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasksReducer";
-import {TaskStatuses, TaskType, todoListsAPI} from "./api/TodoListsAPI";
+import {addTaskThunkCreator, removeTaskThunkCreator, updateTaskThunkCreator} from "./state/tasksReducer";
+import {TaskStatuses, TaskType} from "./api/TodoListsAPI";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -37,28 +40,30 @@ const App = React.memo(() => {
         dispatch(changeTodoListFilterAC(id, value))
     }, [dispatch]);
     const removeTodoList = useCallback((id: string) => {
-        let action = removeTodoListAC(id)
+        let action = removeTodoListThunkCreator(id)
         dispatch(action);
     }, [dispatch]);
     const addTodoList = useCallback((todoListTitle: string) => {
-        let action = addTodoListAC(todoListTitle);
+        let action = addTodoListThunkCreator(todoListTitle);
         dispatch(action);
     }, [dispatch]);
     const changeTodoListTitle = useCallback((id: string, title: string) => {
-        dispatch(changeTodoListTitleAC(id, title))
+        dispatch(changeTodoListTitleThunkCreator(id, title))
     }, [dispatch]);
 
-    const addTask = useCallback((title: string, id: string) => {
-        dispatch(addTaskAC(title, id))
+    const addTask = useCallback((title: string, todoListId: string) => {
+        dispatch(addTaskThunkCreator(todoListId, title))
     }, [dispatch]);
-    const removeTask = useCallback((id: string, todoListId: string) => {
-        dispatch(removeTaskAC(id, todoListId))
+    const removeTask = useCallback((taskId: string, todoListId: string) => {
+        dispatch(removeTaskThunkCreator(todoListId, taskId))
     }, [dispatch]);
+
     const changeTaskTitle = useCallback((id: string, title: string, todoListId: string) => {
-        dispatch(changeTaskTitleAC(id, title, todoListId))
+        dispatch(updateTaskThunkCreator(id, {title: title}, todoListId))
     }, [dispatch]);
+
     const changeTaskStatus = useCallback((id: string, status: TaskStatuses, todoListId: string) => {
-        dispatch(changeTaskStatusAC(id, status, todoListId))
+        dispatch(updateTaskThunkCreator(id, {status: status}, todoListId))
     }, [dispatch]);
 
     return (

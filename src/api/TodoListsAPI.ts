@@ -61,13 +61,13 @@ type GetTasksResponse = {
 
 }
 
-export type UpdateTaskType = {
+export type UpdateTaskModelType = {
     title: string
     description: string
-    status: number
-    priority: number
-    startDate: string | null
-    deadline: string | null
+    status: TaskStatuses
+    priority: TaskPriorities
+    startDate: string
+    deadline: string
 }
 
 
@@ -95,7 +95,7 @@ export const todoListsAPI = {
     },
 
     createTask(todoListId: string, title: string) {
-        const promise = axiosInstance.post<ResponseType<TaskType>>(`todo-lists/${todoListId}/tasks`, {title: title});
+        const promise = axiosInstance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todoListId}/tasks`, {title: title});
         return promise
     },
 
@@ -104,8 +104,8 @@ export const todoListsAPI = {
         return promise
     },
 
-    updateTask(todolistId: string, taskId: string, model: UpdateTaskType) {
-        const promise = axiosInstance.put<UpdateTaskType>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+        const promise = axiosInstance.put<UpdateTaskModelType>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
         return promise
     },
 

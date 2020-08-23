@@ -28,7 +28,7 @@ export const CreateTodolist = () => {
 
 
     const onCreateTodoList = () => {
-        todoListsAPI.createTodoList('Second')
+        todoListsAPI.createTodoList(title)
             .then((res) => {
                 setState(res.data);
             })
