@@ -8,7 +8,7 @@ import {
 } from './tasksReducer';
 
 import {addTodoListAC, setTodoListsAC} from "./todolistsReducer";
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../app/App";
 import {TaskPriorities, TaskStatuses} from "../api/TodoListsAPI";
 
 
