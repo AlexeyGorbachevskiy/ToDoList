@@ -1,7 +1,7 @@
 import React from 'react';
 
 import App from "./App";
-import {ReduxStoreProviderDecorator} from "../stories/ReduxStoreProviderDecorator";
+import {ReduxStoreProviderDecorator} from "./stories/ReduxStoreProviderDecorator";
 
 
 export default {
@@ -13,7 +13,7 @@ export default {
 
 export const AppWithReduxBaseExample = () => {
     return (
-        <App/>
+        <App demo={true}/>
     )
 }
 

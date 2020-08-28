@@ -1,13 +1,18 @@
 import {v1} from "uuid";
-import {todoListsAPI, TodoListType} from "../api/TodoListsAPI";
 import {Dispatch} from "redux";
+import {SetAppErrorACType, setAppStatusAC, SetAppStatusACType, StatusType} from "./appReducer";
+import {todoListsAPI, TodoListType} from "../api/todoListsAPI";
+import {handleServerAppError, handleServerNetworkError} from "../utils/errorUtils";
 
 
 export let todoListId1 = v1();
 export let todoListId2 = v1();
 const initialState: Array<TodoListDomainType> = []
 export type FilterValueType = 'all' | 'completed' | 'active';
-export type TodoListDomainType = TodoListType & { filter: FilterValueType }
+export type TodoListDomainType = TodoListType & {
+    filter: FilterValueType
+    entityStatus: StatusType
+}
 export type AddTodoListActionType = ReturnType<typeof addTodoListAC>;
 export type SetTodoListsActionType = ReturnType<typeof setTodoListsAC>;
 
@@ -17,7 +22,8 @@ type ActionTypes =
     | ReturnType<typeof addTodoListAC>
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodoListFilterAC>
-    | ReturnType<typeof setTodoListsAC>;
+    | ReturnType<typeof setTodoListsAC>
+    | ReturnType<typeof changeTodoListEntityStatus>;
 
 
 export const todoListsReducer = (state: Array<TodoListDomainType> = initialState, action: ActionTypes): Array<TodoListDomainType> => {
@@ -28,7 +34,7 @@ export const todoListsReducer = (state: Array<TodoListDomainType> = initialState
         }
         case 'ADD-TODOLIST': {
             return [
-                {...action.todoList, filter: 'all'},
+                {...action.todoList, filter: 'all', entityStatus: 'idle'},
                 ...state
             ]
         }
@@ -41,9 +47,12 @@ export const todoListsReducer = (state: Array<TodoListDomainType> = initialState
         }
 
         case 'SET-TODOLISTS': {
-            return action.todoLists.map(tl => ({...tl, filter: 'all'}))
+            return action.todoLists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
         }
 
+        case 'CHANGE-TODOLIST-ENTITY-STATUS': {
+            return state.map(tl => tl.id === action.id ? {...tl, entityStatus: action.status} : tl)
+        }
         default: {
             return state
         }
@@ -68,15 +77,22 @@ export const setTodoListsAC = (todoLists: TodoListType[]) => ({
     type: 'SET-TODOLISTS',
     todoLists: todoLists
 } as const)
+export const changeTodoListEntityStatus = (id: string, status: StatusType) => ({
+    type: 'CHANGE-TODOLIST-ENTITY-STATUS',
+    id: id,
+    status
+} as const)
 
 
 //thunks
 export const fetchTodoListsThunkCreator = () => {
     return (
-        (dispatch: Dispatch<ActionTypes>) => {
+        (dispatch: Dispatch<ActionTypes | SetAppStatusACType>) => {
+            dispatch(setAppStatusAC('loading'))
             todoListsAPI.getTodoLists()
                 .then((res) => {
                     dispatch(setTodoListsAC(res.data))
+                    dispatch(setAppStatusAC('succeeded'))
                 })
         }
     )
@@ -84,10 +100,13 @@ export const fetchTodoListsThunkCreator = () => {
 
 export const removeTodoListThunkCreator = (todoListId: string) => {
     return (
-        (dispatch: Dispatch<ActionTypes>) => {
+        (dispatch: Dispatch<ActionTypes | SetAppStatusACType>) => {
+            dispatch(setAppStatusAC('loading'))
+            dispatch(changeTodoListEntityStatus(todoListId, 'loading'))
             todoListsAPI.deleteTodoList(todoListId)
                 .then((res) => {
                     dispatch(removeTodoListAC(todoListId))
+                    dispatch(setAppStatusAC('succeeded'))
                 })
         }
     )
@@ -95,10 +114,26 @@ export const removeTodoListThunkCreator = (todoListId: string) => {
 
 export const addTodoListThunkCreator = (title: string) => {
     return (
-        (dispatch: Dispatch<ActionTypes>) => {
+        (dispatch: Dispatch<ActionTypes | SetAppStatusACType | SetAppErrorACType>) => {
+
+            //progressBar
+            dispatch(setAppStatusAC('loading'))
+
             todoListsAPI.createTodoList(title)
                 .then((res) => {
-                    dispatch(addTodoListAC(res.data.data.item))
+
+
+                    if (res.data.resultCode === 0) {
+                        dispatch(addTodoListAC(res.data.data.item))
+                        //progressBar
+                        dispatch(setAppStatusAC('succeeded'))
+                    } else {
+                        handleServerAppError(res.data, dispatch)
+                    }
+
+                })
+                .catch((error) => {
+                    handleServerNetworkError(error, dispatch)
                 })
         }
     )

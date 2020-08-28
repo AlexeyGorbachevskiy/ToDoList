@@ -46,8 +46,9 @@ export const todoListsAPI = {
         return promise
     },
 
+    //UpdateTaskModelType
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        const promise = axiosInstance.put<UpdateTaskModelType>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
+        const promise = axiosInstance.put<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
         return promise
     },
 
@@ -67,7 +68,7 @@ export type TodoListType = {
     title: string
 }
 
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>
     data: D

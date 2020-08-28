@@ -11,18 +11,18 @@ import {
     TodoListDomainType
 } from "../../state/todolistsReducer";
 import {addTaskThunkCreator, removeTaskThunkCreator, updateTaskThunkCreator} from "../../state/tasksReducer";
-import {TaskStatuses} from "../../api/TodoListsAPI";
+import {TaskStatuses} from "../../api/todoListsAPI";
 import {Grid, Paper} from "@material-ui/core";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./TodoList/ToDoList";
-import {TasksStateType} from "../../app/App";
+import {TasksStateType} from "../../App";
 
 
-type TodoListsListPropsType = {}
+type TodoListsListPropsType = {
+    demo?: boolean
+}
 
-
-
-const TodoLists: React.FC<TodoListsListPropsType> = (props) => {
+const TodoLists: React.FC<TodoListsListPropsType> = ({demo = false, ...props}) => {
 
     const todoLists = useSelector<AppRootType, Array<TodoListDomainType>>(state => state.todoLists);
     const tasks = useSelector<AppRootType, TasksStateType>(state => state.tasks);
@@ -30,6 +30,9 @@ const TodoLists: React.FC<TodoListsListPropsType> = (props) => {
 
 
     useEffect(() => {
+        if (demo) {
+            return
+        }
         dispatch(fetchTodoListsThunkCreator());
     }, [])
 
@@ -77,10 +80,8 @@ const TodoLists: React.FC<TodoListsListPropsType> = (props) => {
                         <Grid key={tl.id} item>
                             <Paper style={{padding: '10px'}}>
                                 <Todolist key={tl.id}
-                                          id={tl.id}
-                                          title={tl.title}
+                                          todoList={tl}
                                           tasks={tasksForTodoList}
-                                          filter={tl.filter}
                                           changeFilter={changeFilter}
                                           removeTodoList={removeTodoList}
                                           changeTodoListTitle={changeTodoListTitle}
@@ -88,6 +89,7 @@ const TodoLists: React.FC<TodoListsListPropsType> = (props) => {
                                           removeTask={removeTask}
                                           changeTaskTitle={changeTaskTitle}
                                           changeTaskStatus={changeTaskStatus}
+                                          demo={demo}
                                 />
                             </Paper>
                         </Grid>
