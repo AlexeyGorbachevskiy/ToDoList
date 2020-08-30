@@ -87,12 +87,15 @@ export const changeTodoListEntityStatus = (id: string, status: StatusType) => ({
 //thunks
 export const fetchTodoListsThunkCreator = () => {
     return (
-        (dispatch: Dispatch<ActionTypes | SetAppStatusACType>) => {
+        (dispatch: Dispatch<ActionTypes | SetAppStatusACType | SetAppErrorACType>) => {
             dispatch(setAppStatusAC('loading'))
             todoListsAPI.getTodoLists()
                 .then((res) => {
                     dispatch(setTodoListsAC(res.data))
                     dispatch(setAppStatusAC('succeeded'))
+                })
+                .catch((error) => {
+                    handleServerNetworkError(error, dispatch)
                 })
         }
     )

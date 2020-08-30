@@ -1,8 +1,6 @@
 import axios from 'axios'
 
 
-
-
 const axiosInstance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
@@ -56,7 +54,26 @@ export const todoListsAPI = {
 }
 
 
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
+}
 
+export const authAPI = {
+    login(data: LoginParamsType) {
+        return axiosInstance.post<ResponseType<{ userId?: number }>>('auth/login', data);
+    },
+    me() {
+        return axiosInstance.get<ResponseType<{ id: number, email: string, login: string }>>('auth/me');
+    },
+    logout() {
+        return axiosInstance.delete<ResponseType<{ userId?: number }>>('auth/login');
+    },
+
+
+}
 
 
 //types
