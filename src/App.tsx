@@ -17,7 +17,7 @@ import {ErrorSnackBar} from "./components/ErrorSnackBar/ErrorSnackBar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
 import {initializeAppThunkCreator, StatusType} from "./state/appReducer";
-import {BrowserRouter, Route} from "react-router-dom";
+import {BrowserRouter, Route, Redirect} from "react-router-dom";
 import {Login} from "./features/Login/Login";
 import {logoutThunkCreator} from "./state/authReducer";
 
@@ -75,7 +75,8 @@ const App = React.memo(({demo = false, ...props}: AppPropsType) => {
                     }
                 </AppBar>
                 <Container fixed>
-                    <Route exact path={'/'} render={() => <TodoLists demo={demo}/>}/>
+                    <Route exact path={'/'} render={() => <Redirect to={'/ToDoList'}/>}/>
+                    <Route exact path={'/ToDoList'} render={() => <TodoLists demo={demo}/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
 
                     {/*for Storybook*/}
